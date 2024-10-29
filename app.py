@@ -12,7 +12,7 @@ from sentence_transformers import SentenceTransformer
 from pinecone import Pinecone
 import openai
 
-openai.api_key = "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"
+#openai.api_key = "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"
 #pinecone_api_key = 'cff06254-079e-4469-be51-342d2bd0f05b'
 
 pc=Pinecone(api_key='6fff7d16-e9f7-4344-b20c-02c3811047db')
