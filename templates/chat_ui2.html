@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChatGPT UI</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    .chat-hist {
+      max-height: calc(100vh - 128px); /* Adjust according to the actual height of the header and footer */
+    }
+    .message-user {
+      background-color: #cce4ff;
+      border-radius: 20px;
+      padding: 10px 20px;
+      align-self: flex-end;
+      max-width: 75%;
+    }
+    .message-bot {
+      background-color: #f0f0f0;
+      border-radius: 0px; /* Square container */
+      padding: 10px 20px;
+      align-self: flex-start;
+      max-width: 75%;
+    }
+    .message-related {
+      background-color: #e0ffe0;
+      border-radius: 20px;
+      padding: 10px 20px;
+      align-self: flex-start;
+      font-style: italic;
+      max-width: 75%;
+    }
+  </style>
+  <!--Start of Tawk.to Script-->
+  <script type="text/javascript">
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    (function(){
+    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+    s1.async=true;
+    s1.src='https://embed.tawk.to/65e95b219131ed19d9761f34/1hobonvph';
+    s1.charset='UTF-8';
+    s1.setAttribute('crossorigin','*');
+    s0.parentNode.insertBefore(s1,s0);
+    })();
+  </script>
+  <!--End of Tawk.to Script-->
+</head>
+<body class="bg-gray-200 h-screen flex items-center justify-center">
+  <div class="flex w-full h-full">
+    <!-- Left Panel -->
+    <div class="w-2/12 h-full bg-white border-r border-gray-300 relative">
+        <div class="h-full flex flex-col justify-between">
+            <div class="overflow-y-auto chat-hist" id="chat-hist">
+                <!-- Chat History Cards -->
+            </div>
+            
+            <div class="bg-gray-100 p-4 bottom-absolute">
+                <h2 class="text-lg font-bold" id="username">
+                  {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="messages">
+                    {% for category, message in messages %}
+                        <p class="{{ category }}">{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+                </h2>
+                <button class="text-blue-500 font-semibold">Logout</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Panel -->
+    <div class="w-10/12 h-full bg-gray-100 flex flex-col justify-between">
+      <!-- Chat Messages -->
+      <div class="flex-grow overflow-y-auto p-4">
+        <div class="flex flex-col space-y-2" id="chat-container">
+          <!-- Chat messages will be appended here -->
+        </div>
+      </div>
+
+      <!-- Message Input -->
+      <div class="flex items-center justify-center bg-white p-4 border-t border-gray-300">
+        <input type="text" id="message-input" placeholder="Type your message..." class="grow w-3/4 border border-gray-300 px-4 py-2 rounded-lg">
+        <button id="send-button" class="ml-4 px-6 py-2 bg-blue-500 text-white font-semibold rounded-lg">Send</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('send-button').addEventListener('click', sendMessage);
+    document.getElementById('message-input').addEventListener('keypress', function(event) {
+      if (event.key === 'Enter') {
+        sendMessage();
+      }
+    });
+
+    function sendMessage() {
+      const messageInput = document.getElementById('message-input');
+      const message = messageInput.value.trim();
+      if (message === '') return;
+
+      appendMessage('user', message);
+
+      // Simulate a response from ChatGPT
+      setTimeout(() => {
+        const response = `Response to: ${message}`;
+        appendMessage('bot', response);
+
+        // Generate and display related questions
+        const relatedQuestions = generateRelatedQuestions(message);
+        relatedQuestions.forEach(question => appendMessage('related', question));
+      }, 1000);
+
+      messageInput.value = '';
+    }
+
+    function appendMessage(sender, message) {
+      const chatContainer = document.getElementById('chat-container');
+      const messageElement = document.createElement('div');
+      if (sender === 'user') {
+        messageElement.className = 'message-user';
+      } else if (sender === 'bot') {
+        messageElement.className = 'message-bot';
+      } else if (sender === 'related') {
+        messageElement.className = 'message-related';
+      }
+      messageElement.textContent = message;
+      chatContainer.appendChild(messageElement);
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+
+    function generateRelatedQuestions(message) {
+      // Simulated related questions
+      return [
+        `Related question 1 for: ${message}`,
+        `Related question 2 for: ${message}`,
+        `Related question 3 for: ${message}`
+      ];
+    }
+  </script>
+</body>
+</html>

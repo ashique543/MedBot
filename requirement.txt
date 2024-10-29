@@ -1,0 +1,9 @@
+langchain
+openai
+torch
+sentence-transformers
+pinecone-client
+flask
+psycopg2
+flask-cors
+langchain-openai
