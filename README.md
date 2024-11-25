@@ -1,1 +1,1 @@
-#MedBot
+![App Screenshot](images/ss.jpg)
